@@ -10,11 +10,13 @@ import UIKit
 
 class ResultViewController: UIViewController {
 
+    // MARK: properties
     var responses: [Answer]!
     
     @IBOutlet weak var resultAnswerLabel: UILabel!
     @IBOutlet weak var resultDefinitionLabel: UILabel!
     
+    // MARK: when the view is loaded it updates the UI to the corresponding animal
     override func viewDidLoad() {
         super.viewDidLoad()
         calculatePersonalityResults()
@@ -26,6 +28,7 @@ class ResultViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: checks every answered question and 'calculates' what the user's corresponding animal is
     func calculatePersonalityResults() {
         var frequencyOfAnswer: [AnimalType: Int] = [:]
         let responseTypes = responses.map { $0.type }

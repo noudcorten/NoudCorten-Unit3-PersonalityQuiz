@@ -8,21 +8,25 @@
 
 import Foundation
 
+// MARK: struct that saves the data of a question
 struct Question {
     var text: String
     var type: ResponseType
     var answers: [Answer]
 }
 
+// MARK: struct that saves the data of a given answer
 struct Answer {
     var text: String
     var type: AnimalType
 }
 
+// MARK: possible answer types
 enum ResponseType {
     case single, multiple, ranged
 }
 
+// MARK: possible result animal types
 enum AnimalType: Character {
     case dog = "🐶", cat = "🐱", rabbit = "🐰", turtle = "🐢"
     var definition: String {

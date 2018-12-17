@@ -10,6 +10,7 @@ import UIKit
 
 class QuestionViewController: UIViewController {
 
+    // MARK: initializer of the different questions
     var questions: [Question] = [
         Question(text: "Which food do you like the most?",
                  type:.single,
@@ -32,6 +33,8 @@ class QuestionViewController: UIViewController {
                                 ]
     var questionIndex = 0
     var answersChosen: [Answer] = []
+    
+    // MARK: properties
     
     @IBOutlet weak var questionLabel: UILabel!
     
@@ -58,16 +61,10 @@ class QuestionViewController: UIViewController {
     
     @IBOutlet weak var questionProgressView: UIProgressView!
     
+    // MARK: when the view is loaded the UI is updated
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ResultSegue" {
-            let resultViewController = segue.destination as! ResultViewController
-            resultViewController.responses = answersChosen
-        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -75,6 +72,7 @@ class QuestionViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: updates the UI according to the current type of question
     func updateUI() {
         singleStackView.isHidden = true
         multipleStackView.isHidden = true
@@ -98,6 +96,7 @@ class QuestionViewController: UIViewController {
         }
     }
     
+    // MARK: udpates the UI to represent the first question
     func updateSingleStack(using answers: [Answer]) {
         singleStackView.isHidden = false
         singleButton1.setTitle(answers[0].text, for: .normal)
@@ -106,6 +105,7 @@ class QuestionViewController: UIViewController {
         singleButton4.setTitle(answers[3].text, for: .normal)
     }
     
+    // MARK: updates the UI to represent the second question
     func updateMultipleStack(using answers: [Answer]) {
         multipleStackView.isHidden = false
         multipleLabel1.text = answers[0].text
@@ -118,6 +118,7 @@ class QuestionViewController: UIViewController {
         multipleSwitch4.isOn = false
     }
     
+    // MARK: updates the UI to represent the third question
     func updateRangedStack(using answers: [Answer]) {
         rangedStackView.isHidden = false
         rangedSlider.setValue(0.5, animated: false)
@@ -125,11 +126,9 @@ class QuestionViewController: UIViewController {
         rangedLabel2.text = answers.last?.text
     }
     
+    // MARK: checks if all the questions are done (yes: go to results screen, no: go to next question
     func nextQuestion() {
-        /* When coming back from result screen, questionIndex is already augmented and the app crashed.
-            To address this issue, the back button from ResultViewController has been removed */
         questionIndex += 1
-        
         if questionIndex < questions.count {
             updateUI()
         } else {
@@ -137,6 +136,7 @@ class QuestionViewController: UIViewController {
         }
     }
     
+    // MARK: checks which button is pressed in question 1
     @IBAction func singleAnswerButtonPressed(_ sender: UIButton) {
         let currentAnswers = questions[questionIndex].answers
         
@@ -156,6 +156,7 @@ class QuestionViewController: UIViewController {
         nextQuestion()
     }
     
+    // MARK: checks which buttons are checked on in question 2
     @IBAction func multipleAnswerButtonPressed() {
         let currentAnswers = questions[questionIndex].answers
         
@@ -174,6 +175,8 @@ class QuestionViewController: UIViewController {
         
         nextQuestion()
     }
+    
+    // MARK: checks what the value of the slider is in question 3
     @IBAction func rangedAnswerButtonPressed() {
         let currentAnswers = questions[questionIndex].answers
         let index = Int(round(rangedSlider.value / Float(currentAnswers.count - 1)))
@@ -182,5 +185,13 @@ class QuestionViewController: UIViewController {
         
         nextQuestion()
         
+    }
+    
+    // MARK: prepares for segue is all the questions are answered
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ResultSegue" {
+            let resultViewController = segue.destination as! ResultViewController
+            resultViewController.responses = answersChosen
+        }
     }
 }
